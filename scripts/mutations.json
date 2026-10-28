@@ -1,0 +1,10 @@
+[
+  {"id": "M1 retry 404", "file": "src/jobs.ts", "from": "const retryable = res.status === 429 || (kind === 'read' && res.status >= 500);", "to": "const retryable = res.status === 429 || res.status === 404 || (kind === 'read' && res.status >= 500);"},
+  {"id": "M2 retry submit on 5xx", "file": "src/jobs.ts", "from": "(kind === 'read' && res.status >= 500)", "to": "(res.status >= 500)"},
+  {"id": "M3 ignore Retry-After", "file": "src/jobs.ts", "from": "await sleep(wait ?? backoff);", "to": "await sleep(backoff);"},
+  {"id": "M4 no Retry-After cap", "file": "src/jobs.ts", "from": "return Math.min(ms, MAX_RETRY_AFTER_MS);", "to": "return ms;"},
+  {"id": "M5 accept http links", "file": "src/jobs.ts", "from": "url.protocol !== 'https:'", "to": "!url.protocol.startsWith('http')"},
+  {"id": "M6 no backoff doubling", "file": "src/jobs.ts", "from": "        await sleep(wait ?? backoff);\n        backoff *= 2;", "to": "        await sleep(wait ?? backoff);"},
+  {"id": "M7 job not unwrapped", "file": "src/jobs.ts", "from": "'read', 'job');", "to": "'read', 'jobs');"},
+  {"id": "M8 404 mapped to bad_request", "file": "src/jobs.ts", "from": "if (status === 404) return 'not_found';", "to": ""}
+]
